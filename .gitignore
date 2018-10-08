@@ -1,0 +1,7 @@
+token
+pip-selfcheck.json
+bin/
+lib/
+account.db
+*.log
+*.pyc

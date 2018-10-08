@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='img/icon.png') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        {% block header %}
+        <div class="header">
+            <h1>Super titre</h1>
+        </div>
+        {% endblock %}
+        {% block content %}{% endblock %}
+        {% block footer %}{% endblock %}
+    </body>
+</html>
