@@ -1,21 +1,27 @@
 {% extends "layout.html" %}
-        {% block title %}Index{% endblock %}
+        {% block title %}Web Media Reader{% endblock %}
         {% block content %}
-        <div class="content_wrapper">
+        <div class="content">
             <div class="left_pannel">
+                <div class="search">
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="navigation">
                 {% with template_name="folder_template.html", directories=files %}{% include template_name %}{% endwith %}
+                </div>
+                <div class="bottom">
+                    Download new content
+                </div>
             </div>
             <div class="main">
-                <div class="middle-text">
                     <!-- <audio controls>
                         <source src="{{ url_for('music', filename='Lying From You - Linkin Park (Meteora).mp4') }}" type="audio/mp4">
                             Your browser does not support the audio element.
                     </audio> -->
-                    <!-- <video controls>
+                    <video controls>
                         <source src="{{ url_for('video', filename='Lying From You - Linkin Park (Meteora).mp4') }}" type="video/mp4">
                             Your browser does not support the video tag.
-                    </video>  -->
-                </div>
+                    </video> 
             </div>
         </div>
         {% endblock %}
