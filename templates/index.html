@@ -7,21 +7,14 @@
                     <input type="text" placeholder="Search...">
                 </div>
                 <div class="navigation">
-                {% with template_name="folder_template.html", directories=files %}{% include template_name %}{% endwith %}
+                {% with template_name='folder_template.html', files=files, depth='' %}{% include template_name %}{% endwith %}
                 </div>
-                <div class="bottom">
+                <div class="download">
                     Download new content
                 </div>
             </div>
             <div class="main">
-                    <!-- <audio controls>
-                        <source src="{{ url_for('music', filename='Lying From You - Linkin Park (Meteora).mp4') }}" type="audio/mp4">
-                            Your browser does not support the audio element.
-                    </audio> -->
-                    <video controls>
-                        <source src="{{ url_for('video', filename='Lying From You - Linkin Park (Meteora).mp4') }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                    </video> 
+                {% with template_name=template, media=media %}{% include template_name %}{% endwith %}
             </div>
         </div>
         {% endblock %}

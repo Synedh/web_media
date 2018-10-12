@@ -1,7 +1,11 @@
-        {% for directory in files.directories %}
-            <div class="item folder_name">{{ directory.0 }}/</div>
-            <div class="subfolder">{% with template_name="folder_template.html", files=directory.1 %}{% include template_name %}{% endwith %}
-            </div>
-        {% endfor %}
-            {% for file in files.files %}<div class="item file_name">{{ file }}</div>
-            {% endfor %}
+                {% for directory in files.directories %}
+                    <div class="item {{ depth + loop.index0|string }} folder" onclick="toggle('{{ depth + loop.index0|string }}')">{{ directory.name }}/</div>
+                    <div class="subfolder">
+                        {% with template_name="folder_template.html", files=directory.path, depth=depth + loop.index0|string + '.' %}
+                            {% include template_name %}
+                        {% endwith %}
+                    </div>
+                {% endfor %}
+                {% for file in files.files %}
+                    <a class="item {{ depth + 'f' }} {{ file.type }}" href="{{ file.path }}">{{ file.name }}</a>
+                {% endfor %}

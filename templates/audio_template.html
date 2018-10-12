@@ -1,4 +1,13 @@
-<audio controls>
-    <source src="{{ media.path }}" type="{{ media.type }}">
-        Your browser does not support the audio element.
-</audio>
+<div class="audio_content">
+    <audio id="audio_player">
+        <source src="/media/music/Linking%20Park/Lying%20From%20You%20-%20Linkin%20Park%20%28Meteora%29.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+    </audio>
+    <img class="audio_image" src=""></img>
+    <div id="audio_controls">
+        <button id="play-pause-button" class="play" onclick="togglePlayPause()">Play</button>
+        <button id="volume-button" class="mute" onclick="toggleMute()">volume2</button>
+        <progress id="volume-bar" min="0" max="100" value="50">50% sound</progress>
+        <progress id="progress-bar" min="0" max="100" value="0">0% played</progress>
+    </div>
+</div>

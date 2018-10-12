@@ -8,17 +8,20 @@ app = Flask(__name__)
 app.debug = True
 
 @app.route('/')
-def index():
-    files = main.files()
-    return render_template('index.html', template='default_template.html', files=files)
+@app.route('/<path:file_path>')
+def index(file_path = None):
+    files = main.rec_files()
+    if file_path:
+        template, media = main.get_media(file_path)
+    else:
+        template = 'default_template.html'
+        media = {}
+    return render_template('index.html', template=template, files=files, media=media)
 
 
 @app.route('/media/<path:file_path>')
 def media(file_path):
-    files = main.files()
-    template, media = main.get_media(file_path)
-    print(media)
-    return render_template('index.html', template=template, files=files, media=media)
+    return send_from_directory(main.MEDIA_FOLDER, file_path)
 
 
 @app.route('/load/<path:url>')
