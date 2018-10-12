@@ -67,7 +67,7 @@ var progressBar = document.getElementById('progress-bar');
 var volumeBar = document.getElementById('volume-bar');
 var progressDrag = false;
 var volumeDrag = false;
-var volumeValue = 0.5;
+var volumeValue = 1;
 
 audioPlayer.addEventListener('play', function() {
    var btn = document.getElementById('play-pause-button');
@@ -86,7 +86,6 @@ audioPlayer.addEventListener('timeupdate', function() {
 }, false);
 
 audioPlayer.addEventListener('volumechange', function() {
-    console.log(audioPlayer.volume);
     var btn = document.getElementById('volume-button');
     if (audioPlayer.volume == 0)
         changeButtonType(btn, 'mute');

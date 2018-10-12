@@ -1,13 +1,30 @@
 <div class="audio_content">
     <audio id="audio_player">
-        <source src="/media/music/Linking%20Park/Lying%20From%20You%20-%20Linkin%20Park%20%28Meteora%29.mp3" type="audio/mp3">
+        <source src="{{ url_for('media', file_path=media.path )}}" type="audio/{{ media.type }}">
             Your browser does not support the audio element.
     </audio>
-    <img class="audio_image" src=""></img>
-    <div id="audio_controls">
-        <button id="play-pause-button" class="play" onclick="togglePlayPause()">Play</button>
-        <button id="volume-button" class="mute" onclick="toggleMute()">volume2</button>
-        <progress id="volume-bar" min="0" max="100" value="50">50% sound</progress>
-        <progress id="progress-bar" min="0" max="100" value="0">0% played</progress>
+    <div class="audio_info">
+        <img class="audio_image" src=""></img>
+        <div class="audio_name"><p>{{ media.name }}</p></div>
+    </div>
+    <img id="play-pause-button" class="play" onclick="togglePlayPause()" src="">
+    <div class="audio_controls">
+        <div class="duration">
+            <div id="duration-value">0:00</div>
+            <div id="duration-progress-containter">
+                <div id="duration-progress">
+                    <span style="width: 25%"></span>
+                </div>
+            </div>
+            <div id="duration-total">-:--</div>
+        </div>
+        <div class="volume">
+            <img id="volume-button" class="mute" onclick="toggleMute()" src="">
+            <div id="volume-progress-containter">
+                <div id="volume-progress">
+                    <span style="width: 25%"></span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
