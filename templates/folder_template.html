@@ -7,5 +7,5 @@
                     </div>
                 {% endfor %}
                 {% for file in files.files %}
-                    <a class="item {{ depth + 'f' }} {{ file.type }}" href="{{ file.path }}" draggable>{{ file.name }}</a>
+                    <a class="item {{ depth + 'f' }} {{ file.type }}" href="{{ file.path }}" draggable="true" ondragstart="drag(event)">{{ file.name }}</a>
                 {% endfor %}

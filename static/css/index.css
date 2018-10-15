@@ -142,12 +142,9 @@ html, body {
     flex-direction: column;
     flex: 0 0 16em;
     order: 2;
+    display: flex;
     background-color: #444;
     border-top-left-radius: 5px;
-}
-
-.right_panel .insert {
-    padding: 5px 0 5px 0;
 }
 
 .right_panel .content {
@@ -163,7 +160,27 @@ html, body {
     border-bottom: 1px solid #ddd;
 }
 
-.right_panel .item {
+.right_panel .tracks {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.right_panel .tracks > a {
+    color: #ddd;
+    text-decoration: none;
+}
+
+.right_panel .insert {
+    padding: 5px 0 5px 0;
+}
+
+.right_panel .insert:last-child {
+    flex-grow: 1;
+}
+
+.right_panel .insert.hovering {
+     background-color: green;
 }
 
 .right_panel .item:hover {

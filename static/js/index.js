@@ -63,18 +63,46 @@ function toggle(folder_depth) {
 
 
 /* Drag element on right pannel */
-function allowDrop(ev) {
-    ev.preventDefault();
+var currentDraggedElem;
+function allowDrop(event) {
+    event.preventDefault();
+    event.target.classList.add('hovering');
 }
 
-function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
+function dragLeave(event) {
+    event.target.classList.remove('hovering');
 }
 
-function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    console.log(data);
+function drag(event) {
+    currentDraggedElem = event.target;
+}
+
+function drop(event) {
+    event.preventDefault();
+    event.target.classList.remove('hovering');
+
+    var item = document.createElement('a');
+    item.classList.add('item');
+    item.classList.add(currentDraggedElem.classList[currentDraggedElem.classList.length - 1]);
+    item.draggable = "true";
+    item.href = currentDraggedElem.href;
+    item.addEventListener('dragstart', function(event) { drag(event) }, false);
+    item.innerHTML = currentDraggedElem.innerHTML;
+
+    var insertElem = document.createElement('div');
+    insertElem.classList.add('insert');
+    insertElem.ondragover = function(event) { allowDrop(event) };
+    insertElem.ondragleave = function(event) { dragLeave(event) };
+    insertElem.ondrop = function(event) { drop(event) };
+
+    if (currentDraggedElem.classList.length <= 2) {
+        currentDraggedElem.parentNode.removeChild(currentDraggedElem.previousElementSibling);
+        currentDraggedElem.parentNode.removeChild(currentDraggedElem);
+    }
+
+    event.target.parentNode.insertBefore(item, event.target);
+    item.parentNode.insertBefore(insertElem, item);
+    currentDraggedElem = null;
 }
 
 /* AUDIO CONTENT */
@@ -205,7 +233,6 @@ function updateVolume (x, value) {
 };
 
 function changeButtonType(btn, value) {
-   btn.innerHTML = value;
    btn.className = value;
 }
 

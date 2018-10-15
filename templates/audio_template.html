@@ -4,10 +4,10 @@
             Your browser does not support the audio element.
     </audio>
     <div class="audio_info">
-        <img class="audio_image" src=""></img>
+        <div class="audio_image"></div>
         <div class="audio_name"><p>{{ media.name }}</p></div>
     </div>
-    <img id="play-pause-button" class="play" onclick="togglePlayPause()" src="">
+    <div id="play-pause-button" class="play" onclick="togglePlayPause()"></div>
     <div class="audio_controls">
         <div class="duration">
             <div id="duration-value">0:00</div>
@@ -19,7 +19,7 @@
             <div id="duration-total">-:--</div>
         </div>
         <div class="volume">
-            <img id="volume-button" class="volume3" onclick="toggleMute()" src="">
+            <div id="volume-button" class="volume3" onclick="toggleMute()"></div>
             <div id="volume-progress-containter">
                 <div id="volume-progress">
                     <span></span>
