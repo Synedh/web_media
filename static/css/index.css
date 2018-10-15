@@ -24,7 +24,7 @@ html, body {
     flex: 1;
 }
 
-.left_pannel {
+.left_panel {
     display: flex;
     color: #ddd;
     flex-direction: column;
@@ -34,7 +34,7 @@ html, body {
     border-top-right-radius: 5px;
 }
 
-.left_pannel input {
+.left_panel input {
     margin: 3px 0 5px 6px;
     padding: 10px 5px 7px 5px;
     border: 0;
@@ -43,16 +43,16 @@ html, body {
     background: transparent;
 }
 
-.left_pannel .navigation {
+.left_panel .navigation {
     flex: 1;
     overflow: auto;
 }
 
-.left_pannel .subfolder {
+.left_panel .subfolder {
     padding-left: 20px;
 }
 
-.left_pannel .item {
+.left_panel .item {
     display: block;
     margin: 9px 0px 9px 5px;
     color: #ddd;
@@ -60,7 +60,8 @@ html, body {
     /* border-bottom: 1px solid black; */
 }
 
-.left_pannel .audio:before {
+.left_panel .audio:before,
+.right_panel .audio:before {
     content: "";
     display: block;
     background-image: url("https://png.icons8.com/material/50/000000/audio-file.png");
@@ -73,7 +74,8 @@ html, body {
 
 }
 
-.left_pannel .video:before {
+.left_panel .video:before,
+.right_panel .video:before {
     content: "";
     display: block;
     background-image: url("https://png.icons8.com/material/50/000000/video-file.png");
@@ -86,11 +88,11 @@ html, body {
 
 }
 
-.left_pannel .folder:hover {
+.left_panel .folder:hover {
     cursor: pointer;
 }
 
-.left_pannel .folder:before {
+.left_panel .folder:before {
     content: "";
     display: block;
     background-image: url("https://png.icons8.com/metro/50/000000/opened-folder.png");
@@ -103,7 +105,7 @@ html, body {
 
 }
 
-.left_pannel .folder.closed:before {
+.left_panel .folder.closed:before {
     content: "";
     display: block;
     background-image: url("https://png.icons8.com/material/50/000000/opened-folder.png");
@@ -116,14 +118,14 @@ html, body {
 
 }
 
-.left_pannel .download {
+.left_panel .download {
     flex: 0 0 2em;
     padding-left: 25px;
     color: #ddd;
     text-decoration: none;
 }
 
-.left_pannel .download:before {
+.left_panel .download:before {
     content: "";
     display: block;
     background-image: url("https://png.icons8.com/material/50/000000/downloading-updates-filled.png");
@@ -135,9 +137,48 @@ html, body {
     filter: invert(80%);
 }
 
+.right_panel {
+    color: #ddd;
+    flex-direction: column;
+    flex: 0 0 16em;
+    order: 2;
+    background-color: #444;
+    border-top-left-radius: 5px;
+}
+
+.right_panel .insert {
+    padding: 5px 0 5px 0;
+}
+
+.right_panel .content {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.right_panel .name {
+    width: 100%;
+    margin: 0 0 5px 0;
+    padding: 0 0 7px 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.right_panel .item {
+}
+
+.right_panel .item:hover {
+    cursor: pointer;
+}
+
 .main {
     flex: 1;
     display: flex;
+}
+
+.not_found {
+    color: #ddd;
+    margin: auto;
+    font-size: xx-large;
 }
 
 .audio_content {
@@ -192,7 +233,7 @@ html, body {
 }
 
 .audio_content #play-pause-button.pause {
-    background-image: url(https://png.icons8.com/material-outlined/100/000000/play-button-circled.png);
+    background-image: url(https://png.icons8.com/material-outlined/100/000000/circled-pause.png);
 }
 
 .audio_content .audio_controls {

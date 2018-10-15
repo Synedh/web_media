@@ -61,77 +61,147 @@ function toggle(folder_depth) {
 // toggle(0);
 // toggle(1);
 
+
+/* Drag element on right pannel */
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    console.log(data);
+}
+
 /* AUDIO CONTENT */
 var audioPlayer = document.getElementById('audio_player');
-var progressBar = document.getElementById('progress-bar');
-var volumeBar = document.getElementById('volume-bar');
+var progressBar = document.getElementById('duration-progress-containter');
+var volumeBar = document.getElementById('volume-progress-containter');
 var progressDrag = false;
 var volumeDrag = false;
 var volumeValue = 1;
 
 audioPlayer.addEventListener('play', function() {
-   var btn = document.getElementById('play-pause-button');
-   changeButtonType(btn, 'pause');
+    var btn = document.getElementById('play-pause-button');
+    changeButtonType(btn, 'pause');
 }, false);
 
 audioPlayer.addEventListener('pause', function() {
-   var btn = document.getElementById('play-pause-button');
-   changeButtonType(btn, 'play');
+    var btn = document.getElementById('play-pause-button');
+    changeButtonType(btn, 'play');
 }, false);
 
 audioPlayer.addEventListener('timeupdate', function() {
-   var percentage = Math.floor((100 / audioPlayer.duration) * audioPlayer.currentTime);
-   progressBar.value = percentage;
-   progressBar.innerHTML = percentage + '% played';
+    if (typeof(Storage) !== "undefined") {
+        if (audioPlayer.currentTime != audioPlayer.duration)
+            sessionStorage[audioPlayer.currentSrc] = audioPlayer.currentTime;
+        else {
+            /* End of audio */
+            sessionStorage.removeItem(audioPlayer.currentSrc);
+        }
+    }
+    updateProgress(0, audioPlayer.currentTime);
 }, false);
 
 audioPlayer.addEventListener('volumechange', function() {
     var btn = document.getElementById('volume-button');
+    console.log(audioPlayer.volume);
     if (audioPlayer.volume == 0)
         changeButtonType(btn, 'mute');
-    else if (audioPlayer.volume < 0.5)
+    else if (audioPlayer.volume < 0.33)
         changeButtonType(btn, 'volume1');
-    else 
+    else if (audioPlayer.volume < 0.67)
         changeButtonType(btn, 'volume2');
-});
-
-progressBar.addEventListener('mousedown', function(event) {
-    console.log(event);
+    else
+        changeButtonType(btn, 'volume3');
+    if (typeof(Storage) !== "undefined") {
+        localStorage.volume = audioPlayer.volume;
+    }
+    updateVolume(0, audioPlayer.volume)
 }, false);
 
+progressBar.addEventListener('mousedown', function(event) { 
+    progressDrag = true;
+    updateProgress(event.pageX);
+}, false);
 
 volumeBar.addEventListener('mousedown', function(event) {
     volumeDrag = true;
     updateVolume(event.pageX);
-})
+}, false)
 
-volumeBar.addEventListener('mouseup', function (event) {
+document.addEventListener('mouseup', function (event) {
+    if (progressDrag) {
+        progressDrag = false;
+        updateProgress(event.pageX);
+    }
     if (volumeDrag) {
         volumeDrag = false;
         updateVolume(event.pageX);
     }
-});
+}, false);
 
-volumeBar.addEventListener('mousemove', function (event) {
+document.addEventListener('mousemove', function (event) {
+    if (progressDrag) {
+        updateProgress(event.pageX);
+    }
     if (volumeDrag) {
         updateVolume(event.pageX);
     }
-});
+}, false);
 
-var updateVolume = function (x) {
-    var position = x - volumeBar.getBoundingClientRect().left + document.body.scrollLeft;
-    var percentage = 100 * position / volumeBar.offsetWidth;
-
-    if (percentage > 100) {
-        percentage = 100;
+function updateProgress(x, value) {
+    var durationProgress = document.getElementById('duration-progress').children[0];
+    var percentage = 0;
+    if (value) {
+        percentage = (100 / audioPlayer.duration) * value;
+        var mn = parseInt(value / 60);
+        var sec = parseInt(value % 60);
+        if (sec < 10)
+            sec = '0' + sec;
+        document.getElementById('duration-value').innerHTML = mn + ':' + sec;
     }
-    if (percentage < 0) {
-        percentage = 0;
+    else {
+        var position = x - progressBar.getBoundingClientRect().left + document.body.scrollLeft;
+        percentage = 100 * position / progressBar.offsetWidth;
+
+        if (percentage > 100) {
+            percentage = 100;
+        }
+        if (percentage < 0) {
+            percentage = 0;
+        }
+        if (audioPlayer.currentTime != parseInt(percentage * audioPlayer.duration / 100))
+            audioPlayer.currentTime = parseInt(percentage * audioPlayer.duration / 100);
+    }
+    durationProgress.style.width = percentage + "%";
+}
+
+function updateVolume (x, value) {
+    var volumeProgress = document.getElementById('volume-progress').children[0];
+    var percentage = 0;
+    if (value) {
+        percentage = 100 * value;
+    }
+    else {
+        var position = x - volumeBar.getBoundingClientRect().left + document.body.scrollLeft;
+        percentage = 100 * position / volumeBar.offsetWidth;
+
+        if (percentage > 100) {
+            percentage = 100;
+        }
+        if (percentage < 0) {
+            percentage = 0;
+        }
+        audioPlayer.volume = percentage / 100;
     }
 
     //update volume bar and video volume
-    volumeBar.value = percentage;
-    audioPlayer.volume = percentage / 100;
+    volumeProgress.style.width = percentage + '%';
 };
 
 function changeButtonType(btn, value) {
@@ -166,3 +236,14 @@ function toggleMute() {
         audioPlayer.volume = 0;
    }
 }
+
+window.onload = function() {
+    if (audioPlayer && typeof(Storage) !== "undefined") {
+        if(localStorage.volume) {
+            audioPlayer.volume = localStorage.volume;
+        }
+        if (sessionStorage[audioPlayer.currentSrc] && sessionStorage[audioPlayer.currentSrc] != 0) {
+            audioPlayer.currentTime = sessionStorage[audioPlayer.currentSrc];
+        }
+    }
+};

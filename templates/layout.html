@@ -9,9 +9,9 @@
     </head>
     <body>
         {% block header %}
-        <div class="header">
+        <a class="header" href="{{ url_for('index') }}">
             <h1>Web Media Reader</h1>
-        </div>
+        </a>
         {% endblock %}
         {% block content %}{% endblock %}
         {% block footer %}

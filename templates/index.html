@@ -2,7 +2,7 @@
         {% block title %}Web Media Reader{% endblock %}
         {% block content %}
         <div class="content">
-            <div class="left_pannel">
+            <div class="left_panel">
                 <div class="search">
                     <input type="text" placeholder="Search...">
                 </div>
@@ -15,6 +15,9 @@
             </div>
             <div class="main">
                 {% with template_name=template, media=media %}{% include template_name %}{% endwith %}
+            </div>
+            <div class="right_panel">
+                {% with template_name='playlist_template.html' %}{% include template_name %}{% endwith %}
             </div>
         </div>
         {% endblock %}

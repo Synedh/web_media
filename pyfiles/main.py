@@ -55,10 +55,13 @@ def download_complete(stream, file_handle):
 
 
 def get_media(path):
+    print(path)
     extension = path.split('.')[-1]
     name = ".".join(path.split('/')[-1].split('.')[:-1])
     if extension in ('mp3', 'ogg', 'flac', 'wav'):
         return 'audio_template.html', {'path': path, 'name': name, 'type': extension}
-    else:
+    elif extension in ('mp4', 'webm', 'avi', 'wmv', 'mkv', 'flv'):
         return 'video_template.html', {'path': path, 'name': name, 'type': extension}
+    else:
+        return 'not_found_template.html', {'path': path, 'name': name, 'type': extension}
 
