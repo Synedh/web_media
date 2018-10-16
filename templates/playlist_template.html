@@ -1,6 +1,17 @@
 <div class="content">
     <div class="name">Current playlist</div>
-    <div class="tools"></div>
+    <div class="tools">
+        <div class="remove" ondrop="removeDrop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" title="Drag track to remove it"></div>
+        <div class="list_playlist" title="List saved playlists">
+            <!-- <div id="myDropdown" class="dropdown-content">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+            </div> -->
+        </div>
+        <div class="save_current" title="Save playlist"></div>
+        <div class="remove_current" title="Delete playlist"></div>
+    </div>
     <div class="tracks">
         <div class="insert" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></div>
     </div>

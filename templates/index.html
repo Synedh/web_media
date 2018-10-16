@@ -13,8 +13,10 @@
                     Download new content
                 </div>
             </div>
-            <div class="main">
+            <div class="main" ondrop="removeDrop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+                <button id="toggle_left" onclick="toggle_panel(event, 'left_panel')" title="Toggle files"><<</button>
                 {% with template_name=template, media=media %}{% include template_name %}{% endwith %}
+                <button id="toggle_right" onclick="toggle_panel(event, 'right_panel')" title="Toggle playlists">>></button>
             </div>
             <div class="right_panel">
                 {% with template_name='playlist_template.html' %}{% include template_name %}{% endwith %}

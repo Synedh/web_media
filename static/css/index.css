@@ -5,6 +5,7 @@ html, body {
     display: flex;
     flex-direction: column;
     background-color: black;
+    overflow: hidden;
 }
 
 .header {
@@ -19,9 +20,16 @@ html, body {
 }
 
 .content {
+    position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: row;
     flex: 1;
+}
+
+.left_panel.hidden,
+.right_panel.hidden {
+    display: none;
 }
 
 .left_panel {
@@ -31,7 +39,6 @@ html, body {
     flex: 0 0 16em;
     order: -1;
     background-color: #444;
-    border-top-right-radius: 5px;
 }
 
 .left_panel input {
@@ -64,7 +71,7 @@ html, body {
 .right_panel .audio:before {
     content: "";
     display: block;
-    background-image: url("https://png.icons8.com/material/50/000000/audio-file.png");
+    background-image: url("../img/audio-file.png");
     background-size: 22px 22px;
     width: 22px;
     height: 22px;
@@ -78,7 +85,7 @@ html, body {
 .right_panel .video:before {
     content: "";
     display: block;
-    background-image: url("https://png.icons8.com/material/50/000000/video-file.png");
+    background-image: url("../img/video-file.png");
     background-size: 22px 22px;
     width: 22px;
     height: 22px;
@@ -95,7 +102,7 @@ html, body {
 .left_panel .folder:before {
     content: "";
     display: block;
-    background-image: url("https://png.icons8.com/metro/50/000000/opened-folder.png");
+    background-image: url("../img/opened-folder.png");
     background-size: 20px 20px;
     width: 20px;
     height: 20px;
@@ -108,7 +115,7 @@ html, body {
 .left_panel .folder.closed:before {
     content: "";
     display: block;
-    background-image: url("https://png.icons8.com/material/50/000000/opened-folder.png");
+    background-image: url("../img/folder-invoices.png");
     background-size: 20px 20px;
     width: 20px;
     height: 20px;
@@ -128,7 +135,7 @@ html, body {
 .left_panel .download:before {
     content: "";
     display: block;
-    background-image: url("https://png.icons8.com/material/50/000000/downloading-updates-filled.png");
+    background-image: url("../img/downloading-updates-filled.png");
     background-size: 20px 20px;
     width: 20px;
     height: 20px;
@@ -138,19 +145,21 @@ html, body {
 }
 
 .right_panel {
+    overflow: hidden;
     color: #ddd;
     flex-direction: column;
     flex: 0 0 16em;
     order: 2;
     display: flex;
     background-color: #444;
-    border-top-left-radius: 5px;
 }
 
 .right_panel .content {
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     padding: 10px;
+    max-height: 100%;
 }
 
 .right_panel .name {
@@ -160,8 +169,53 @@ html, body {
     border-bottom: 1px solid #ddd;
 }
 
+.right_panel .tools {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 7px 0 7px 0;
+}
+
+.right_panel .tools > div {
+    background-size: 30px 30px;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #000;
+    border-radius: 3px;
+    filter: invert(80%);
+}
+
+.right_panel .tools .remove {
+    background-image: url("https://png.icons8.com/metro/48/000000/minus-math.png");
+}
+
+.right_panel .tools .list_playlist {
+    background-image: url("https://png.icons8.com/ios-glyphs/48/000000/checklist.png");
+}
+
+.right_panel .tools .list_playlist:hover {
+    cursor: pointer;
+}
+
+.right_panel .tools .save_current {
+    background-image: url("https://png.icons8.com/ios-glyphs/48/000000/save.png");
+}
+
+.right_panel .tools .save_current:hover {
+    cursor: pointer;
+}
+
+.right_panel .tools .remove_current {
+    background-image: url("https://png.icons8.com/metro/48/000000/delete-sign.png");
+}
+
+.right_panel .tools .remove_current:hover {
+    cursor: pointer;
+}
+
 .right_panel .tracks {
     flex-grow: 1;
+    overflow: auto;
     display: flex;
     flex-direction: column;
 }
@@ -180,7 +234,7 @@ html, body {
 }
 
 .right_panel .insert.hovering {
-     background-color: green;
+     background-color: #666;
 }
 
 .right_panel .item:hover {
@@ -190,6 +244,33 @@ html, body {
 .main {
     flex: 1;
     display: flex;
+    position: relative;
+}
+
+.main #toggle_left {
+    position: absolute;
+    background-color: #444;
+    padding: 10px 10px 10px 10px;
+    border: none;
+    border-radius: 0 7px 7px 0;
+    font-size: large;
+    color: #ddd;
+}
+
+.main #toggle_right {
+    position: absolute;
+    right: 0;
+    background-color: #444;
+    padding: 10px 10px 10px 10px;
+    border: none;
+    border-radius: 7px 0 0 7px;
+    font-size: large;
+    color: #ddd;
+}
+
+.main #toggle_left:hover,
+.main #toggle_right:hover {
+    cursor: pointer;
 }
 
 .not_found {
@@ -221,7 +302,7 @@ html, body {
 }
 
 .audio_content .audio_name > p {
-    width: 500px;
+    max-width: 500px;
     margin: auto;
     padding-top: 20px;
     text-align: center;
@@ -246,16 +327,17 @@ html, body {
 }
 
 .audio_content #play-pause-button.play {
-    background-image: url(https://png.icons8.com/material-outlined/100/000000/play-button-circled.png);
+    background-image: url(../img/play-button-circled.png);
 }
 
 .audio_content #play-pause-button.pause {
-    background-image: url(https://png.icons8.com/material-outlined/100/000000/circled-pause.png);
+    background-image: url(../img/circled-pause.png);
 }
 
 .audio_content .audio_controls {
     display: flex;
     justify-content: space-around;
+    padding: 0 30px 0 30px;
 }
 
 .audio_content .volume {
@@ -280,19 +362,19 @@ html, body {
 }
 
 .audio_content #volume-button.mute {
-    background-image: url(https://png.icons8.com/ios/20/000000/mute-filled.png);
+    background-image: url(../img/mute-filled.png);
 }
 
 .audio_content #volume-button.volume1 {
-    background-image: url(https://png.icons8.com/ios/20/000000/low-volume-filled.png);
+    background-image: url(../img/low-volume-filled.png);
 }
 
 .audio_content #volume-button.volume2 {
-    background-image: url(https://png.icons8.com/ios/20/000000/medium-volume-filled.png);
+    background-image: url(../img/medium-volume-filled.png);
 }
 
 .audio_content #volume-button.volume3 {
-    background-image: url(https://png.icons8.com/ios/20/000000/high-volume-filled.png);
+    background-image: url(../img/high-volume-filled.png);
 }
 
 .audio_content #volume-progress-containter {
@@ -321,7 +403,8 @@ html, body {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    width: 70%;
+    flex: 1;
+    padding: 0 30px 0 30px;
 }
 
 .audio_content #duration-progress-containter {
@@ -356,4 +439,21 @@ html, body {
     max-height: 100%;
     width: 100%;
     margin: auto;
+}
+
+@media only screen and (max-width: 550px) {
+    .audio_content .audio_controls {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .audio_content .volume {
+        padding-top: 10px;
+    }
+
+    .left_panel, .right_panel {
+        position: absolute;
+        width: 256px;
+        height: 100%;
+    }
 }
