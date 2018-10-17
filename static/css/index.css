@@ -225,6 +225,11 @@ html, body {
     text-decoration: none;
 }
 
+.right_panel .tracks .current_track {
+    background-color: #222;
+    border-radius: 3px;
+}
+
 .right_panel .insert {
     padding: 5px 0 5px 0;
 }

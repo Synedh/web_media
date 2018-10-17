@@ -87,19 +87,152 @@ function toggle(folder_depth) {
 
 
 /*** PLAYLIST ***/
-var currentTrack = function() {
+var currentPlaylist;
+class Playlist {
+    constructor() {
+        this.tracks = [];
+        this.currentTrack = -1;
+    }
 
-};
+    playTrack(id) {
+        this.currentTrack = id;
+        this.saveCurrent();
+        window.location.assign(this.tracks[id]['path']);
+    }
 
+    prevTrack() {
+        if (this.currentTrack > 0)
+            this.playTrack(this.currentTrack - 1);
+    }
+
+    nextTrack() {
+        if (this.currentTrack < this.tracks.length)
+            this.playTrack(this.currentTrack + 1);
+    }
+
+    addTrack(name, path, type, trackId) {
+        if (trackId) {
+            this.tracks.splice(trackId, 0, {
+                'name': name,
+                'path': path,
+                'type': type 
+            });
+        }
+        else {
+            this.tracks.push({
+                'name': name,
+                'path': path,
+                'type': type 
+            });
+        }
+        if (trackId < this.currentTrack) {
+            this.currentTrack++;
+            this.updateCurrentTrack();
+        }
+        this.saveCurrent();
+    }
+
+    removeTrack(trackId) {
+        if (trackId < this.currentTrack) {
+            this.currentTrack--;
+            this.updateCurrentTrack();
+        }
+        this.tracks.splice(trackId, 1);
+        this.saveCurrent();
+    }
+
+    updateCurrentTrack() {
+        var tracks = document.getElementsByClassName("tracks")[0].children;
+        var nTrack = -1
+        for (var i = 0; i < tracks.length; i++) {
+            if (tracks[i].classList.contains('item')) {
+                nTrack++;
+                if (nTrack == this.currentTrack)
+                    tracks[i].classList.add('current_track');
+                else if (tracks[i].classList.contains('current_track'))
+                    tracks[i].classList.remove('current_track');
+            }
+        }
+    }
+
+    load(name) {
+        if (typeof(Storage) !== "undefined") {
+            var save = JSON.parse(localStorage[name]);
+            var tracks = document.getElementsByClassName("tracks")[0];
+            this.tracks = save['tracks'];
+            this.currentTrack = save['currentTrack'];
+
+            for (var i = 0; i < this.tracks.length; i++) {
+                var track = document.createElement('div');
+                track.classList.add('item');
+                track.classList.add(this.tracks[i]['type']);
+                track.draggable = "true";
+                track.href = this.tracks[i]['path'];
+                track.innerHTML = this.tracks[i]['name'];
+                track.ondragstart = function(event) { dragStart(event) };
+                track.ondragend = function(event) { dragEnd(event) };
+                track.onclick = function(event) { currentPlaylist.playTrack(countTracksBefore(event.target)); };
+
+                var insertElem = document.createElement('div');
+                insertElem.classList.add('insert');
+                insertElem.ondragover = function(event) { allowDrop(event) };
+                insertElem.ondragleave = function(event) { dragLeave(event) };
+                insertElem.ondrop = function(event) { drop(event) };
+
+                tracks.appendChild(track);
+                tracks.appendChild(insertElem);
+            }
+            this.updateCurrentTrack();
+        }
+    }
+
+    save(name) {
+        if (typeof(Storage) !== "undefined") {
+            localStorage['name'] = JSON.stringify({
+                'tracks': this.tracks,
+                'currentTrack': -1
+            });
+        }
+    }
+
+    saveCurrent() {
+        if (typeof(Storage) !== "undefined") {
+            localStorage.currentPlaylist = JSON.stringify({
+                'tracks': this.tracks,
+                'currentTrack': this.currentTrack
+            });
+        }
+    }
+
+    static deletePlaylist(name) {
+        if (typeof(Storage) !== "undefined") {
+            localStorage.removeItem(name);
+        }
+    }
+}
+
+function countTracksBefore(stopElem) {
+    var children = document.getElementsByClassName("tracks")[0].children;
+    var count = 0;
+    for (var i = 0; i < children.length; i++) {
+        if (stopElem && children[i] === stopElem)
+            break;
+        if (children[i].classList.contains('item'))
+            count++;
+    }
+    return count;
+}
 
 var currentDraggedElem;
 function allowDrop(event) {
     event.preventDefault();
-    event.target.classList.add('hovering');
+    if (event.target.nodeName == "DIV" && event.target.classList.contains('insert'))
+        event.target.classList.add('hovering');
 }
 
 function dragLeave(event) {
-    event.target.classList.remove('hovering');
+    if (event.target.nodeName == "DIV" && event.target.classList.contains('insert'))
+        event.target.classList.remove('hovering');
 }
 
 function dragStart(event) {
@@ -114,14 +247,15 @@ function drop(event) {
     event.preventDefault();
     event.target.classList.remove('hovering');
 
-    var item = document.createElement('a');
-    item.classList.add('item');
-    item.classList.add(currentDraggedElem.classList[currentDraggedElem.classList.length - 1]);
-    item.draggable = "true";
-    item.href = currentDraggedElem.href;
-    item.innerHTML = currentDraggedElem.innerHTML;
-    item.ondragstart = function(event) { dragStart(event) };
-    item.ondragend = function(event) { dragEnd (event) };
+    var track = document.createElement('div');
+    track.classList.add('item');
+    track.classList.add(currentDraggedElem.classList[currentDraggedElem.classList.length - 1]);
+    track.draggable = "true";
+    track.href = currentDraggedElem.href;
+    track.innerHTML = currentDraggedElem.innerHTML;
+    track.onclick = function(event) { currentPlaylist.playTrack(countTracksBefore(event.target)); };
+    track.ondragstart = function(event) { dragStart(event) };
+    track.ondragend = function(event) { dragEnd (event) };
 
     var insertElem = document.createElement('div');
     insertElem.classList.add('insert');
@@ -129,18 +263,22 @@ function drop(event) {
     insertElem.ondragleave = function(event) { dragLeave(event) };
     insertElem.ondrop = function(event) { drop(event) };
 
-    event.target.parentNode.insertBefore(item, event.target);
-    item.parentNode.insertBefore(insertElem, item);
+    currentPlaylist.addTrack(
+        track.innerHTML,
+        track.href,
+        track.classList[track.classList.length - 1],
+        countTracksBefore(event.target)
+    );
+    event.target.parentNode.insertBefore(track, event.target);
+    track.parentNode.insertBefore(insertElem, track);
 
-    if (currentDraggedElem.classList.length <= 2) {
-        currentDraggedElem.parentNode.removeChild(currentDraggedElem.previousElementSibling);
-        currentDraggedElem.parentNode.removeChild(currentDraggedElem);
-    }
+    removeDrop(event);
 }
 
 function removeDrop(event) {
     event.preventDefault();
     if (currentDraggedElem.classList.length <= 2) {
+        currentPlaylist.removeTrack(countTracksBefore(currentDraggedElem));
         currentDraggedElem.parentNode.removeChild(currentDraggedElem.previousElementSibling);
         currentDraggedElem.parentNode.removeChild(currentDraggedElem);
     }
@@ -321,6 +459,12 @@ window.onload = function() {
         }
         if (sessionStorage.right_panel) {
             document.getElementById('toggle_right').click();
+        }
+        if (localStorage.currentPlaylist) {
+            currentPlaylist = new Playlist();
+            currentPlaylist.load('currentPlaylist');
+        } else {
+            currentPlaylist = new Playlist();
         }
     }
 };
